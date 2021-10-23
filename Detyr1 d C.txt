@@ -1,0 +1,131 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <time.h>
+using namespace std;
+//Me tabel Hash
+//krijimi i tabeles hash
+typedef struct Liste {
+	int celes;
+	string vlere;
+	struct Liste *pas;
+}Liste;
+//kthimi ne asci
+int string_asci (string s){
+	int shuma = 0;
+	for (int i=0; i<s.length();i++){
+		char a = s.at(i);
+		shuma+= (int)a;
+	}
+	return shuma;
+}
+char lowerChar(char a) {
+  int asci = (int)a;
+  if (asci>=65 && asci<=90)
+  	 asci+=32;
+  return (char) asci;
+}
+//kthimi ne shkronja te vogla te te gjithe stringut
+string lowerString (string s){
+	string l = "";
+	for (int i=0; i<s.length();i++){
+		l+=lowerChar(s.at(i)); 
+	}
+	return l;
+}
+afishimi i tabeles hash
+void afisho (Liste *H[],int size){
+	for (int i=0; i<size; i++){
+		Liste *tmp = H[i];
+		cout<<"Hash celes "<<i<<" :"<<endl;
+		cout<<endl;
+		while (tmp!=NULL){
+			cout<<i<<" - "<<tmp->vlere<<endl;
+			tmp=tmp->pas;
+		}
+		cout<<endl;
+	}
+}
+//krijimi
+Liste *krijo_listel (int asci, string a){
+	Liste *l = new Liste;
+	l->celes=llogaritja_Hash(asci,10);
+	l->vlere=a;
+	l->pas=NULL;
+	return l;
+}
+//shohim nese nje vler ndodhet ne tabelen hash
+Liste *permban (Liste *H[],int poz, string a){
+	Liste *tmp = H[poz];
+	while (tmp!=NULL){
+		if (tmp->vlere == a){
+				return tmp;
+			}
+		tmp=tmp->pas;
+	}
+	return tmp;
+}
+//llogaritja e celesit
+int llogaritja_Hash (int celes, int nr){
+	return celes%nr;
+}
+//shohim nese tabela eshte bosh
+void kthe_null (Liste *H[],int size){
+	for (int i=0; i<size; i++)
+		H[i]=NULL;
+}
+//vendosja ne fillim 
+Liste *vendos_ne_fillim (Liste *l,Liste *Liste){
+	Liste->pas=l;
+	l=Liste;
+	return l;
+}
+//vendosja ne tabel
+void vendosHash_tabel (Liste *H[],Liste *Liste){
+	if (permban(H,Liste->celes,Liste->vlere)==NULL){
+		H[Liste->celes]=vendos_ne_fillim(H[Liste->celes],Liste);
+	}
+	return;
+}
+//lidhja me skedarin
+void hash_skedar (){
+	//Krijimi i tabeles HASH
+	int n = 10;
+	int nrE = 10;
+	Liste *HASH [n];
+	kthe_null(HASH,n);
+	
+	ifstream in;
+	in.open("File.txt");
+	if (!in){
+		cout<<"File could not be found;"<<endl;
+		return ;
+	}
+	else{
+		while (!in.eof()){
+			string s;
+			in>>s;
+			s=lowerString(s);			
+			vendosHash_tabel(HASH,krijo_listel(string_asci(s),s));
+		}
+	}
+	in.close();	
+	afisho(HASH,n);	
+}
+
+int main (){
+	clock_t fillo, mbaro;
+    double koha;	
+    fillo = clock();
+    
+    //Funksioni qe do i matet koha e exe
+    hash_skedar();
+		
+    mbaro = clock();
+    koha = ((double) (mbaro - fillo)) / CLOCKS_PER_SEC;
+    
+    cout<<endl;
+    cout<<"Koha e ekzekutimit:  <"<<koha*1000<<"> milisekonda"<<endl;
+	return 0;
+}
+//Kompleksiteti eshte O(n) dhe e ka kerkimi ne tabelen hash.

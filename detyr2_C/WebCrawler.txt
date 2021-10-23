@@ -1,0 +1,55 @@
+import java.util.Scanner;
+import java.net.URL;
+import java.util.ArrayList;
+public class WebCrawler {
+	//jepet niveli i thellesis,linket neper te cilat kalon ne nje url te caktuardhe te gjithe linked ku ka kaluar
+		private static final int MAX_PAGES_TO_SEARCH = 5;
+		ArrayList<String> links = new ArrayList<>();
+	    ArrayList<String> allLinks = new ArrayList<>();
+	    //marim nje url si argument dhe kerkojm per adresa te tjera 
+	    public int crawler(String startingURL) {
+	    	int n=0;
+	    	//vendosim adresen fillestare ne liste
+		    allLinks.add(startingURL);
+		    //kontollojme nese lista eshte bosh ose nese kemi aritur limitin e kerkimit
+		    while (!allLinks.isEmpty() && 
+		    		links.size()<=MAX_PAGES_TO_SEARCH ) {
+		    	n++;
+		      String urlString = allLinks.remove(0);
+		      links.add(urlString);
+		      System.out.println("Link: " + urlString);
+		      for (String s: getURLs(urlString)) {
+		        if (!links.contains(s) && 
+		        		!allLinks.contains(s))
+		          allLinks.add(s);
+		      }
+		    }
+		    return n;
+		  }
+//krijoj listen me url
+	    public ArrayList<String> getURLs(String url) {
+		    ArrayList<String> links = new ArrayList<>();
+		    try {
+		    	URL addressURL=new URL(url);
+		    	Scanner web=new Scanner(addressURL.openStream());
+		    	while(web.hasNext()) {
+		    		String next=web.next();
+//adresat perfshihen vetem nese permbajn te dhenat e meposhtme
+		    		if(next.contains("href=\"https:\\")|| next.contains("href=\"http://")) {
+		    			int fillim=next.indexOf("\"")+1;
+		    			int fundi=next.lastIndexOf("\"");
+		    			String s=next.substring(fillim,fundi);
+		    			if(!allLinks.contains(s)) {
+		    				links.add(s);
+		    				allLinks.add(s);
+		    			}
+		    		}
+		    	}
+		    }
+		    catch (Exception ex) {
+		        System.out.println("Error: " + ex.getMessage());
+		      }
+		      
+		      return links;
+		}
+}

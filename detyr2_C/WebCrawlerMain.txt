@@ -1,0 +1,12 @@
+package ushtrim2C;
+import java.util.Scanner;
+public class WebCrawlerMain {
+	public static void main(String[] args) {
+		WebCrawler web=new WebCrawler();
+	    Scanner input = new Scanner(System.in);
+	    System.out.print("Enter a URL: ");
+	    String url = input.nextLine(); 
+	    System.out.print(web.crawler(url));
+	     
+	  }
+}

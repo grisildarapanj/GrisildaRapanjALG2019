@@ -1,0 +1,107 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <time.h>
+using namespace std;
+//Me list te lidhur nje drejtimore
+//krijimi i listes
+typedef struct Liste {
+	int celes;
+	string vlere;
+	struct Liste *pas;
+}Liste;
+//kthimi ne shkronja te vogla te te gjithe stringut
+string lowerString (string a){
+	string l = "";
+	for (int i=0; i<a.length();i++){
+		l+=lowerChar(a.at(i)); 
+	}
+	return l;
+}
+//kthimi ne asci
+char lowerChar(char a) {
+  int asci = (int)a;
+  if (asci>=65 && asci<=90)
+  	 asci+=32;
+  return (char) asci;
+}
+//afishimi i listes
+void afisho (Liste *l){
+	Liste *tmp = l;
+	while (tmp!=NULL){
+		cout<<tmp->celes<<" "<<tmp->vlere<<endl;
+		tmp=tmp->pas;
+	}
+}
+//lidhja me skedarin
+void lista_skedar (){
+	Liste *l = new Liste;
+	l->celes=0;
+	l->vlere="Fjalor";
+	l->pas=NULL;
+	
+	ifstream in;
+	in.open("file.txt");
+	if (!in){
+		cout<<"File nuk gjendet"<<endl;
+		return ;
+	}
+	else{
+		while (!in.eof()){
+			string s;
+			in>>s;
+			vendos(l,lowerString(s));
+		}
+	}
+	in.close();	
+	afisho(l);	
+}
+//testimi nese nje vlere e caktuar ndodhet ne list
+int permban (Liste *l, string w){
+	Liste *tmp = l;
+	int s = 0;
+	while (tmp!=NULL)
+	{
+		if (tmp->vlere==w){
+			return -1;
+		}
+		s++;
+		tmp=tmp->pas;
+	}
+	return count;
+}
+//vendosja e nje vlere ne list
+void vendos (Liste *l,string s){
+	Liste * tmp = l;
+	int ndodhet = permban(l,s);
+	if (ndodhet!=-1){
+		Liste * tmp = l;
+		for (int i=1; i<exists; i++){
+			tmp = tmp->pas;
+		}
+		Liste *t= new Liste;
+		t->celes=exists;
+		t->vlere=s;
+		tmp->pas=new;
+		t->pas=NULL;
+	}
+}
+
+int main (){
+    clock_t fillo, mbaro;
+    double koha;	
+    fillo = clock();
+    
+    
+    lista_skedar();
+		
+    mbaro = clock();
+    koha = ((double) (mbaro - fillo)) / CLOCKS_PER_SEC;
+    
+    
+    cout<<endl<<"Koha ekzekutimit: "<<koha*1000<<" milisekonda"<<endl;
+	return 0;
+}
+
+//Kompleksiteti eshte O(n) dhe kete kompleksitet e ka kerkimi ne liste.
+//Kemi : 1+1+n+1+n+1+n+n+1 =4n+5 => O(n)

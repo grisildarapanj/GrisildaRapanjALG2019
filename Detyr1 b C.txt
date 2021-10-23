@@ -1,0 +1,143 @@
+#include <iostream>
+#include <string>
+#include <time.h>
+#include <fstream>
+#include <cmath>
+using namespace std;
+//Me peme binare
+//krijimi i pemes
+typedef struct Liste {
+	int celes;
+	string vlere;
+	struct Liste *majtas, *djathtas, *prindi;
+}peme;
+//llogaritja e celesit
+int string_celes (string s){
+	int shuma = 0;
+	for (int i=0; i<s.length();i++){
+		char c = s.at(i);
+		shuma += (int)c;
+	}
+	return shuma;
+}
+//krijimi i pemes
+peme *krijoPeme (string a,int s){
+	peme *element = new peme;
+	element->celes=s;
+	element->vlere=a;
+	element->majtas=NULL;
+	element->djathtas=NULL;
+	element->prindi=NULL;
+	return element;
+}
+//kthimi ne asci
+char lowerChar(char c) {
+  int asci = (int)c;
+  if (asci>=65 && asci<=90)
+  	 asci+=32;
+  return (char) asci;
+}
+//kthimi ne shkronja te vogla te te gjithe stringut
+string lowerString (string s){
+	string a = "";
+	for (int i=0; i<s.length();i++){
+		a+=lowerChar(s.at(i)); 
+	}
+	return a;
+}
+//shohim nese nje element ndodhet ne peme
+peme * permban (peme *T , peme *element){
+	int value = elemen->celes;
+	peme * tmp = T;
+	while (tmp!=NULL && value!=tmp->celes){
+		if (value < tmp->celes){
+			tmp=tmp->majtas;
+		}else{
+			tmp=tmp->djathtas;
+		}
+	}
+	return tmp;
+}
+//vendosja e nje elementi ne peme
+void vendosEl (peme *T, peme *t){ 
+		if (permban(T,t)==NULL)
+		shtoElement(T,t);
+}
+//afishimi i pemes
+void afisho (peme *T){
+	if (T!=NULL){
+		afisho(T->majtas);
+		cout<<T->celes<<" "<<T->vlere<<endl;
+		afisho(T->djathtas);
+	}
+}
+//shtimi i nje elementi ne peme
+void shtoElement (peme *a, peme *z){
+	peme *x=a; 
+        peme*y=NULL;
+	while (x!=NULL){
+		y=x;
+		if (z->celes<x->celes){
+			
+			x=x->majtas;
+		}
+		else {
+			
+			x=x->djathtas;
+		}
+	}
+	if (y==NULL){
+		T=z; 
+	}
+	else if (z->celes < y->celes){
+		y->majtas=z;
+	}
+	else{
+		y->djathtas=z;
+	}
+}
+//lidhja me skedarin
+void skedar_peme (){
+	peme *T = new peme;
+	T->prindi=NULL;
+	T->majtas=NULL;
+	T->djathtas=NULL;
+	T->vlere="Fjalor";
+	T->celes=string_celes(lowerString(T->vlere));
+	
+	ifstream in;
+	in.open("file.txt");
+	if (!in){
+		cout<<"File nuk gjendet"<<endl;
+		return ;
+	}
+	else{
+		int shuma=1;
+		while (!in.eof()){
+			string s;
+			in>>s;
+			s = lowerString(s);
+			shuma++;
+			vendosEl(T,krijoPeme(s,string_celes(s)));
+			}
+		in.close();
+	}
+	afisho(T);
+}
+
+int main (){
+	clock_t fillo, mbaro;
+    double koha;	
+    fillo = clock();
+    
+    skedar_peme();
+		
+    mbaro = clock();
+    koha= ((double) (mbaro - fillo)) / CLOCKS_PER_SEC;
+    
+    
+    cout<<endl<<"Koha e ekzekutiomit: "<<koha*1000<<" milisekonda"<<endl;
+	
+	return 0;
+}
+//Kompleksiteti eshte O(h) dhe e ka shtimi i nje elementi ne peme.
